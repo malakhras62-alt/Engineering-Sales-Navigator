@@ -7,58 +7,84 @@ st.title("🚀 Engineering Solution Sales Navigator")
 st.sidebar.header("Meeting Setup")
 inst_name = st.sidebar.text_input("Institution Name", "e.g., University of Dubai")
 
-# --- Progress Bar based on your spreadsheet rows ---
-# (You can add more stages here as you add rows from your PDF)
-step = st.select_slider("Meeting Phase", options=["Intro", "Access & Discovery", "AI & Data Integrity", "Process & Budget"])
+# --- Progress Bar based on Spreadsheet Rows ---
+step = st.select_slider("Meeting Phase", options=[
+    "01. Intro & Access", 
+    "02. Discovery Layers", 
+    "03. AI & Data Integrity", 
+    "04. Active Tools", 
+    "05. Material Property", 
+    "06. Equations & Graphs",
+    "07. Process & Decision"
+])
 
 st.divider()
 
-# --- THE DYNAMIC LOGIC ENGINE (Mapping to Renewals.pdf) ---
-
-if step == "Access & Discovery":
-    # --- ROW 1 FROM SPREADSHEET ---
+# --- ROW 1: CONTENT ACCESS ---
+if step == "01. Intro & Access":
     st.subheader("Module: Content Access")
-    main_q = "How are your students currently accessing content?"
-    st.markdown(f"**Main Question:** {main_q}")
+    q1 = "How are your students currently accessing content?"
+    st.markdown(f"**Question:** {q1}")
     
-    # Layer 1: Potential Answers
-    ans_choice = st.radio("Select Response:", ["Select...", "Through the platforms directly", "Mainly through library homepage search bar"])
+    ans1 = st.radio("Response:", ["Select...", "Through the platforms directly", "Mainly through our library homepage search bar"])
 
-    if ans_choice == "Through the platforms directly": # Answer 1
-        st.info(f"🎯 **Follow-up:** Which platforms or tools are they using?") # Objection/Follow-up 1
-        
-        # Layer 2: Answers 1-A and 1-B
-        ans_1_layer = st.selectbox("Specific Tools:", ["Select...", "MATLAB / Solidworks / AutoCAD", "We don't know / Specialized"])
-        
-        if ans_1_layer == "MATLAB / Solidworks / AutoCAD": # Answer 1-A
-            st.success("💡 **Next Step:** How do they get verified equations into those tools without risking human error from static PDFs?") # Follow-up 1-A
-        elif ans_1_layer == "We don't know / Specialized": # Answer 1-B
-            st.success("💡 **Next Step:** If the library doesn't know the workflow, how do you ensure the budget supports actual results?") # Follow-up 1-B
+    if ans1 == "Through the platforms directly":
+        st.info("🎯 **Follow-up:** Which Platform or tools are they using?")
+        sub_ans = st.selectbox("Sub-Response:", ["Select...", "MATLAB / Solidworks / AutoCad", "We don't Know they are specialized platforms"])
+        if sub_ans == "MATLAB / Solidworks / AutoCad":
+            st.success("💡 **Next:** How do they get verified equations into those tools without risking human error from static PDFs?")
+        elif sub_ans == "We don't Know they are specialized platforms":
+            st.success("💡 **Next:** If the library doesn't know the workflow, how can you ensure the budget supports actual results?")
 
-    elif ans_choice == "Mainly through library homepage search bar": # Answer 2
-        st.info(f"🎯 **Follow-up:** Static lists are great for theory, but how do you ensure interactive data is available where they work?") # Objection/Follow-up 2
-        
-        # Layer 2: Answers 2-A and 2-B
-        ans_2_layer = st.selectbox("Library Support:", ["Select...", "We don't have anything", "We provide software like MATLAB separately"])
-        
-        if ans_2_layer == "We don't have anything": # Answer 2-A
-            st.error("💡 **Next Step:** Without interactive tools, how do you prevent the 30% time-waste on manual data entry?") # Follow-up 2-A
-        elif ans_2_layer == "We provide software like MATLAB separately": # Answer 2-B
-            st.success("💡 **Next Step:** MATLAB is the engine, but where do they get the validated 'fuel' (material properties) for it?") # Follow-up 2-B
+    elif ans1 == "Mainly through our library homepage search bar":
+        st.info("🎯 **Follow-up:** Static lists are great for theory, but how do you ensure the interactive data is available right where they are doing the work?")
+        sub_ans = st.selectbox("Sub-Response:", ["Select...", "We don't Have anything", "We provide access to software like MATLAB separately"])
+        if sub_ans == "We don't Have anything":
+            st.error("💡 **Next:** Without interactive tools, how do you prevent the 30% time-waste on manual data entry?")
+        elif sub_ans == "We provide access to software like MATLAB separately":
+            st.success("💡 **Next:** MATLAB is the engine, but where do they get the validated fuel (material properties) to plug into it?")
 
-elif step == "AI & Data Integrity":
-    # --- ROW 2 FROM SPREADSHEET ---
-    st.subheader("Module: AI Risks")
-    main_q_ai = "How do you ensure students are using accurate AI with validated data?"
-    st.markdown(f"**Main Question:** {main_q_ai}")
+# --- ROW 2: DISCOVERY LAYERS ---
+elif step == "02. Discovery Layers":
+    st.subheader("Module: Discovery & Search")
+    q2 = "Discovery layers often rely on exact keyword matching. How do you ensure a student looking for 'corrosion' doesn't miss content using the term 'oxidation'?"
+    st.markdown(f"**Question:** {q2}")
+    
+    ans2 = st.radio("Response:", ["Select...", "Our discovery tool handles synonyms", "Students are responsible for their own search strings"])
+    
+    if ans2 == "Our discovery tool handles synonyms":
+        st.info("🎯 **Follow-up:** Most tools use general dictionaries. Does yours include engineering-specific taxonomies to catch variations like 'creep' vs 'deformation'?")
+    elif ans2 == "Students are responsible for their own search strings":
+        st.error("💡 **Next:** If they miss content, the library is subscribing to 'Invisible Content.' How do you justify the ROI of hidden data?")
 
-    ans_ai = st.radio("Select Response:", ["Select...", "We don't have an AI policy", "Students use ChatGPT/Gemini", "We have a specialized research AI"])
+# --- ROW 3: AI & DATA INTEGRITY ---
+elif step == "03. AI & Data Integrity":
+    st.subheader("Module: AI Integrity")
+    q3 = "How do you ensure students are using an accurate AI that provides validated data rather than general AI that might hallucinate engineering values?"
+    st.markdown(f"**Question:** {q3}")
+    
+    ans3 = st.radio("Response:", ["Select...", "We encourage ChatGPT for efficiency", "We have no official AI policy", "We use specialized academic AI"])
+    
+    if ans3 == "We encourage ChatGPT for efficiency":
+        st.error("💡 **Next:** General AI has a 15-20% hallucination rate in engineering. How do you protect the university's research integrity?")
+    elif ans3 == "We have no official AI policy":
+        st.warning("💡 **Next:** Without a policy, students go to the easiest tool. How do you provide a 'Safe Haven' of validated engineering data?")
 
-    if ans_ai == "We don't have an AI policy": # Answer 1
-        st.info("🎯 **Follow-up:** Without a policy, how do you manage the risk of students citing hallucinated data in their designs?")
-        # Logic continues to Answer 1-A / 1-B as per your spreadsheet...
+# --- ROW 7: PROCESS & DECISION (MEDDPICC) ---
+elif step == "07. Process & Decision":
+    st.subheader("Module: Decision Making")
+    q7 = "Who is the ultimate decision maker Library director or Library Committee or rector?"
+    st.markdown(f"**Question:** {q7}")
+    
+    ans7 = st.radio("Response:", ["Select...", "Library Director", "Library Committee", "Rector"])
+    
+    if ans7 == "Library Director":
+        st.info("🎯 **Follow-up:** Since you hold the ultimate decision, what specific 'internal proof' do you need to justify the Purchase?")
+        sub_ans7 = st.selectbox("Requirements:", ["Select...", "Demand", "Usage", "Budget", "Demand, Usage and Budget"])
+        if sub_ans7:
+            st.success(f"💡 **Next:** Let's focus on {sub_ans7} to ensure we meet your specific criteria for approval.")
 
-# --- SIDEBAR MEDDPICC TRACKER ---
+# --- SIDEBAR TRACKER ---
 st.sidebar.divider()
-st.sidebar.write(f"**Current Lead:** {inst_name}")
-st.sidebar.write("**MEDDPICC Status:** Deep Discovery")
+st.sidebar.write(f"**Lead:** {inst_name}")
+st.sidebar.write("**Status:** Interactive Discovery")
