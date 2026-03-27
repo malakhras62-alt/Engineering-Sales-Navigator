@@ -1,88 +1,118 @@
 import streamlit as st
 
 # --- Page Configuration ---
-st.set_page_config(page_title="Sales Navigator Wizard", layout="wide")
+st.set_page_config(page_title="Sales Wizard", layout="wide")
 
-# --- Initialize Session State (The Program's Memory) ---
-if 'step' not in st.session_state:
-    st.session_state.step = 1
+# --- Session State Initialization ---
+if 'row_index' not in st.session_state:
+    st.session_state.row_index = 0
 if 'sub_step' not in st.session_state:
-    st.session_state.sub_step = 0
+    st.session_state.sub_step = "main"
 
-def next_step():
-    st.session_state.step += 1
-    st.session_state.sub_step = 0
+def next_row():
+    st.session_state.row_index += 1
+    st.session_state.sub_step = "main"
 
 def reset():
-    st.session_state.step = 1
-    st.session_state.sub_step = 0
+    st.session_state.row_index = 0
+    st.session_state.sub_step = "main"
 
-st.title("🚀 Engineering Sales Navigator: Interactive Wizard")
+# --- Data Mapping from your Spreadsheet ---
+# Each dictionary represents a row in your Renewals file
+data = [
+    {
+        "main_q": "How are your students currently accessing content?",
+        "answers": {
+            "Answer 1": {
+                "text": "Through the platforms directly",
+                "follow_up": "Which Platform or tools are they using?",
+                "sub_answers": {
+                    "Answer 1-A": ("MATLAB / Solidworks / AutoCad", "How do they get verified equations into those tools without risking human error from static PDFs?"),
+                    "Answer 1-B": ("We don't Know they are specialized platforms", "If the library doesn't know the workflow, how can you ensure the budget supports actual results?")
+                }
+            },
+            "Answer 2": {
+                "text": "mainly through our library homepage search bar.",
+                "follow_up": "Static lists are great for theory, but how do you ensure the interactive data (equations/tables) is available where they work?",
+                "sub_answers": {
+                    "Answer 2-A": ("We don't Have anything", "Without interactive tools, how do you prevent the 30% time-waste on manual data entry?"),
+                    "Answer 2-B": ("We provide access to software like MATLAB separately", "MATLAB is the engine, but where do they get the validated fuel (material properties) to plug into it?")
+                }
+            }
+        }
+    },
+    {
+        "main_q": "Discovery layers often rely on exact keyword matching. How do you ensure a student looking for 'corrosion' doesn't miss 'oxidation'?",
+        "answers": {
+            "Answer 1": {
+                "text": "Our discovery tool handles synonyms",
+                "follow_up": "Does it include engineering-specific taxonomies to catch variations like 'creep' vs 'deformation'?",
+                "sub_answers": {} # Empty - will trigger next module
+            },
+            "Answer 2": {
+                "text": "Students are responsible for their own search strings",
+                "follow_up": "If they miss content, the library is subscribing to 'Invisible Content.' How do you justify the ROI?",
+                "sub_answers": {} # Empty
+            }
+        }
+    },
+    {
+        "main_q": "Who is the ultimate decision maker Library director or Library Committee or rector?",
+        "answers": {
+            "Answer 1": {
+                "text": "Library Director",
+                "follow_up": "Since you hold the ultimate decision, what specific 'internal proof' do you need to justify the Purchase?",
+                "sub_answers": {
+                    "Answer 1-A": ("Demand / Usage / Budget", "Let's align on a success plan to prove this specific value.")
+                }
+            }
+        }
+    }
+]
+
+# --- UI RENDERER ---
+st.sidebar.title("Controls")
 st.sidebar.button("🔄 Reset Meeting", on_click=reset)
-inst_name = st.sidebar.text_input("Institution Name", "University of Dubai")
+inst_name = st.sidebar.text_input("University Name", "University of Dubai")
 
-# --- STEP 1: CONTENT ACCESS ---
-if st.session_state.step == 1:
-    st.header("Module 01: Content Access")
-    q1 = "How are your students currently accessing content?"
-    st.subheader(q1)
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Answer 1: Through the platforms directly"):
-            st.session_state.sub_step = 1.1
-    with col2:
-        if st.button("Answer 2: Library homepage search bar"):
-            st.session_state.sub_step = 1.2
+if st.session_state.row_index < len(data):
+    current_row = data[st.session_state.row_index]
+    st.header(f"Question {st.session_state.row_index + 1}")
+    st.subheader(current_row["main_q"])
 
-    if st.session_state.sub_step == 1.1:
-        st.info("🎯 **Follow-up:** Which Platform or tools are they using?")
-        opt1 = st.button("1-A: MATLAB / Solidworks / AutoCad")
-        opt2 = st.button("1-B: We don't Know / Specialized")
-        if opt1:
-            st.success("💡 **Next:** How do they get verified equations into those tools without risking human error from static PDFs?")
-            st.button("Move to Next Module ➡️", on_click=next_step)
-        if opt2:
-            st.success("💡 **Next:** If the library doesn't know the workflow, how can you ensure the budget supports actual results?")
-            st.button("Move to Next Module ➡️", on_click=next_step)
+    # Show Main Answers
+    if st.session_state.sub_step == "main":
+        for key, val in current_row["answers"].items():
+            if st.button(val["text"]):
+                st.session_state.selected_ans = key
+                st.session_state.sub_step = "follow_up"
+                st.rerun()
 
-    if st.session_state.sub_step == 1.2:
-        st.info("🎯 **Follow-up:** Static lists are great for theory, but how do you ensure the interactive data is available where they work?")
-        opt3 = st.button("2-A: We don't Have anything")
-        opt4 = st.button("2-B: We provide access to software like MATLAB separately")
-        if opt3:
-            st.error("💡 **Next:** Without interactive tools, how do you prevent the 30% time-waste on manual data entry?")
-            st.button("Move to Next Module ➡️", on_click=next_step)
-        if opt4:
-            st.success("💡 **Next:** MATLAB is the engine, but where do they get the validated fuel (material properties) to plug into it?")
-            st.button("Move to Next Module ➡️", on_click=next_step)
+    # Show Follow-up and Sub-Answers
+    elif st.session_state.sub_step == "follow_up":
+        ans_data = current_row["answers"][st.session_state.selected_ans]
+        st.info(f"🎯 **Follow-up:** {ans_data['follow_up']}")
+        
+        # Check if sub-answers exist
+        if ans_data["sub_answers"]:
+            for sub_key, sub_val in ans_data["sub_answers"].items():
+                if st.button(sub_val[0]):
+                    st.session_state.final_follow_up = sub_val[1]
+                    st.session_state.sub_step = "final"
+                    st.rerun()
+        else:
+            # If empty, move to next main question
+            st.button("Move to Next Main Question ➡️", on_click=next_row)
 
-# --- STEP 2: DISCOVERY LAYERS ---
-elif st.session_state.step == 2:
-    st.header("Module 02: Discovery Layers")
-    q2 = "Discovery layers often rely on exact keyword matching. How do you ensure a student looking for 'corrosion' doesn't miss 'oxidation'?"
-    st.subheader(q2)
+    # Show Final Follow-up
+    elif st.session_state.sub_step == "final":
+        st.success(f"💡 **Closing Insight:** {st.session_state.final_follow_up}")
+        st.button("Move to Next Main Question ➡️", on_click=next_row)
 
-    if st.button("Answer 1: Our discovery tool handles synonyms"):
-        st.info("🎯 **Follow-up:** Does it include engineering-specific taxonomies to catch variations like 'creep' vs 'deformation'?")
-        st.button("Move to Next Module ➡️", on_click=next_step)
-    
-    if st.button("Answer 2: Students are responsible for their own search strings"):
-        st.error("💡 **Next:** If they miss content, you are subscribing to 'Invisible Content.' How do you justify ROI?")
-        st.button("Move to Next Module ➡️", on_click=next_step)
+else:
+    st.balloons()
+    st.success("Meeting Flow Complete!")
+    st.button("Start New Meeting", on_click=reset)
 
-# --- STEP 3: AI & DATA INTEGRITY ---
-elif st.session_state.step == 3:
-    st.header("Module 03: AI & Data Integrity")
-    q3 = "How do you ensure students are using an accurate AI that provides validated data?"
-    st.subheader(q3)
-
-    if st.button("Answer 1: We encourage ChatGPT for efficiency"):
-        st.error("💡 **Next:** General AI has a 15-20% hallucination rate. How do you protect research integrity?")
-        st.button("Move to Next Module ➡️", on_click=next_step)
-    
-    if st.button("Answer 2: We have no official AI policy"):
-        st.warning("💡 **Next:** Without a policy, students go to the easiest tool. How do you provide a 'Safe Haven'?")
-        st.button("Finish Discovery 🏁", on_click=reset)
-
-st.sidebar.markdown(f"--- \n**Current Lead:** {inst_name}")
+st.sidebar.divider()
+st.sidebar.write(f"**Current Lead:** {inst_name}")
