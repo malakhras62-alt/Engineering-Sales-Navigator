@@ -8,43 +8,46 @@ st.sidebar.header("Meeting Setup")
 inst_name = st.sidebar.text_input("Institution Name", "e.g., University of Dubai")
 
 # --- Progress Bar ---
-step = st.select_slider("Meeting Phase", options=["Intro", "Discovery", "AI Risk", "Demo", "Process", "The Close"])
+step = st.select_slider("Meeting Phase", options=["Intro", "Access & Integration", "AI Risk", "The Close"])
 
 st.divider()
 
-# --- Logic Engine ---
-if step == "Intro":
-    st.subheader(f"Welcome to {inst_name}")
-    st.info("💡 ACTION: Open SciVal Chart now.")
-    st.write("**Commercial Insight:** Rankings are driven by citations; citations require seamless access.")
-
-elif step == "Discovery":
-    st.subheader("Q1: Access & Integration")
-    choice = st.radio("How do they access content?", ["Discovery Layer (ExLibris)", "LMS (Blackboard/Canvas)"])
+# --- MODULE 1: ACCESS & INTEGRATION ---
+if step == "Access & Integration":
+    st.subheader(f"Step 2: Access & Discovery at {inst_name}")
     
-    if choice == "Discovery Layer (ExLibris)":
-        st.warning("👉 FOLLOW-UP: 'When a student is stuck at midnight in the LMS, do they really leave to search your portal, or go to Google?'")
-    else:
-        st.warning("👉 FOLLOW-UP: 'Are these just static reading lists, or can students solve equations and digitize curves directly?'")
+    # LAYER 1: Main Question
+    main_q = st.radio(
+        "Main Question: How are your students currently accessing content?",
+        ["Select...", "1. Through the platforms directly", "2. Mainly through our library homepage search bar"]
+    )
 
+    # LAYER 2: First Follow-up based on Answer 1
+    if main_q == "1. Through the platforms directly":
+        st.info("🎯 Follow-up: 'Which specific platforms or tools are they using?'")
+        layer_1_ans = st.selectbox("Librarian's Response:", ["Select...", "1-1: MATLAB / Solidworks / AutoCAD", "1-2: We don't know (Specialized)"])
+        
+        if layer_1_ans == "1-1: MATLAB / Solidworks / AutoCAD":
+            st.success("💡 CHALLENGER PIVOT: 'How do they get verified equations into those platforms without risking human error from static PDFs?'")
+        elif layer_1_ans == "1-2: We don't know (Specialized)":
+            st.error("💡 CHALLENGER PIVOT: 'If the library doesn't know the workflow, how can you ensure the budget supports actual engineering results?'")
+
+    # LAYER 2: First Follow-up based on Answer 2
+    elif main_q == "2. Mainly through our library homepage search bar":
+        st.info("🎯 Follow-up: 'Static lists are great for theory, but how do you ensure the interactive data (equations/tables) is available right where they are doing the work?'")
+        layer_2_ans = st.selectbox("Librarian's Response:", ["Select...", "2-1: We don't have anything", "2-2: We provide software like MATLAB separately"])
+        
+        if layer_2_ans == "2-1: We don't have anything":
+            st.error("💡 CHALLENGER PIVOT: 'Without interactive tools, how do you prevent the 30% time-waste on manual data entry?'")
+        elif layer_2_ans == "2-2: We provide software like MATLAB separately":
+            st.success("💡 CHALLENGER PIVOT: 'MATLAB is the engine, but where do they get the validated fuel—the material properties—to plug into it?'")
+
+# --- MODULE 2: AI RISK (Placeholder for next session) ---
 elif step == "AI Risk":
-    st.subheader("Q2: AI Integrity")
-    ai_choice = st.radio("What is their stance on AI?", ["They ban/discourage AI", "They use General AI (ChatGPT)"])
-    
-    if ai_choice == "They ban/discourage AI":
-        st.error("💡 CHALLENGE: 'Since they use it anyway for speed, wouldn't it be safer to provide a Grounded AI that only cites peer-reviewed content?'")
-    else:
-        st.error("💡 CHALLENGE: 'General AI has a 15-20% hallucination rate. How do you protect research integrity?'")
+    st.subheader("Next Module: AI Integrity")
+    st.write("Ready to build the AI Risk logic tree...")
 
-elif step == "The Close":
-    st.subheader("Q3: The Faculty Meeting (The 'Ask')")
-    close_choice = st.radio("Librarian's Response:", ["Dean is too busy", "Start trial on website first"])
-    
-    if close_choice == "Dean is too busy":
-        st.success("🎯 REBUTTAL: 'Let's frame it as an Engineering Data Integrity Briefing focused on Accreditation risk, not a demo.'")
-    else:
-        st.success("🎯 REBUTTAL: 'A passive trial is dead money. We need a Faculty Scream to justify the Rector's budget.'")
-
-# --- Footer Guidance ---
-st.sidebar.write("---")
-st.sidebar.write(f"**MEDDPICC Focus:** {inst_name}")
+# --- Sidebar MEDDPICC Tracker ---
+st.sidebar.divider()
+st.sidebar.write(f"**Current Lead:** {inst_name}")
+st.sidebar.write("**MEDDPICC Status:** Discovery Stage")
