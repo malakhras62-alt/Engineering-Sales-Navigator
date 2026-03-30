@@ -132,4 +132,4 @@ elif st.session_state.row_index >= 0:
 
         elif st.session_state.sub_step == "follow_up":
             if st.session_state.selected_ans == "ans1":
-                st.info("🎯 **Objection
+                st.info("🎯 **Objection")
