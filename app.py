@@ -568,7 +568,7 @@ elif st.session_state.row_index == 5:
 
 
 
-# --- MODULE 8: TIMELINE & PROCUREMENT ---
+# --- MODULE 7: TIMELINE & PROCUREMENT ---
 
 elif st.session_state.row_index == 7:
 
