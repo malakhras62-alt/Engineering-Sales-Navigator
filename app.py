@@ -98,3 +98,33 @@ elif st.session_state.row_index == 1:
         elif st.session_state.selected_ans == "ans3":
             st.info("🎯 **Objection:** Would it not be great to combine the literature provided by the library with the tools in a single solution?")
             st.button("Next Main Question ➡️", on_click=next_row)
+
+# --- MODULE 3: DATA EXTRACTION & ACCURACY ---
+elif st.session_state.row_index == 2:
+    st.header("Phase 03: Data Extraction & Accuracy")
+    st.subheader("If a researcher or a student asks the library to extract a graph to interact with it or get a material property under specific conditions, how would the library address that?")
+
+    # LAYER 1: MAIN ANSWERS
+    if st.session_state.sub_step == "main":
+        if st.button("Answer 1: We don't have a specific tool; students handle extraction manually."):
+            st.session_state.selected_ans = "ans1"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 2: We refer them to specialized digitization software."):
+            st.session_state.selected_ans = "ans2"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+
+    # LAYER 2: OBJECTIONS
+    elif st.session_state.sub_step == "follow_up":
+        
+        # Branch for Answer 1 (Focus on Human Error)
+        if st.session_state.selected_ans == "ans1":
+            st.error("🎯 **Objection:** Extracting data manually out of graphs is the #1 mistake in getting inaccurate information—not to mention the typo errors or miscalculation mistakes they can have.")
+            st.info("💡 **Insight:** How is the library mitigating the risk of students using faulty data in their Capstone or Research projects?")
+            st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 2 (Focus on Friction)
+        elif st.session_state.selected_ans == "ans2":
+            st.info("🎯 **Objection:** Moving between multiple tools creates 'Data Friction.' Would it not be more secure to have a single source where the data is interactive right on the page?")
+            st.button("Next Main Question ➡️", on_click=next_row)
