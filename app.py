@@ -282,3 +282,57 @@ elif st.session_state.row_index == 5:
                     st.error("💡 **Objection/Follow-up 2:** If you are evaluating a new database or tool, what things make you consider it a top priority?")
             
             st.button("Next Main Question ➡️", on_click=next_row)
+
+# --- MODULE 8: TIMELINE & PROCUREMENT ---
+elif st.session_state.row_index == 7:
+    st.header("Phase 08: Timeline & Procurement")
+    st.subheader("After the trial, if usage is good, demand is high, and the price is reasonable, when would you like the start date to be?")
+
+    # LAYER 1: MAIN ANSWERS (START DATES)
+    if st.session_state.sub_step == "main":
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            if st.button("Answer 1: 01 Jan"):
+                st.session_state.selected_ans = "jan"
+                st.session_state.sub_step = "follow_up"
+                st.rerun()
+        with col2:
+            if st.button("Answer 2: Next Quarter"):
+                st.session_state.selected_ans = "next_q"
+                st.session_state.sub_step = "follow_up"
+                st.rerun()
+        with col3:
+            if st.button("Answer 3: Sept"):
+                st.session_state.selected_ans = "sept"
+                st.session_state.sub_step = "follow_up"
+                st.rerun()
+
+    # LAYER 2: SIGNING PROCESS & APPROVALS
+    elif st.session_state.sub_step == "follow_up":
+        st.info("🎯 **Objection/Follow-up:** How long does the signing process take? Any additional approvals we need to secure from other departments like Procurement or Finance?")
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("1-A: Yes (Procurement/Finance involved)"):
+                st.session_state.sub_step = "final_check"
+                st.rerun()
+        with c2:
+            if st.button("1-B: No (Direct Library Approval)"):
+                st.success("💡 **Strategy:** Focus on the direct paperwork flow to meet your requested start date.")
+                st.button("Next Main Question ➡️", on_click=next_row)
+
+    # LAYER 3: THE BACKLOG DRILL-DOWN
+    elif st.session_state.sub_step == "final_check":
+        st.warning("🎯 **Final Follow-up:** Do they typically have a backlog we should account for now?")
+        
+        b1, b2 = st.columns(2)
+        with b1:
+            if st.button("Yes (There is a backlog)"):
+                st.error("💡 **Action Item:** We should start the paperwork 4-6 weeks earlier to ensure we hit your start date.")
+                st.button("Next Main Question ➡️", on_click=next_row)
+        with b2:
+            if st.button("No (Clear process)"):
+                st.success("💡 **Action Item:** We will align our proposal timeline with their standard processing time.")
+                st.button("Next Main Question ➡️", on_click=next_row)
+
+
