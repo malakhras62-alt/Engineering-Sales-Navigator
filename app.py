@@ -202,3 +202,31 @@ elif st.session_state.row_index >= 0:
         if st.button("Restart Navigator"):
             st.session_state.row_index = -1
             st.rerun()
+
+import pandas as pd
+from datetime import datetime
+import os
+
+def save_to_csv(univ, stakeholder, solution):
+    file_name = "meeting_history.csv"
+    
+    # Create the data row
+    new_data = {
+        "Date": [datetime.now().strftime("%Y-%m-%d %H:%M")],
+        "University": [univ],
+        "Stakeholder": [stakeholder],
+        "Solution": [solution],
+        "Status": ["Completed"]
+    }
+    df_new = pd.DataFrame(new_data)
+    
+    # If file doesn't exist, create it with headers. If it does, append without headers.
+    if not os.path.isfile(file_name):
+        df_new.to_csv(file_name, index=False)
+    else:
+        df_new.to_csv(file_name, mode='a', header=False, index=False)
+
+# --- Inside your Final Wrap-Up Page (Phase 09) ---
+if st.button("🏁 End Meeting & Save to Database"):
+    save_to_csv(st.session_state.univ_name, st.session_state.stakeholder, st.session_state.solution_pitch)
+    st.success("Data saved to meeting_history.csv!")
