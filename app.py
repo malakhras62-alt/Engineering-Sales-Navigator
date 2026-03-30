@@ -1,36 +1,63 @@
 import streamlit as st
 
-
-
 # --- Session State Initialization ---
-
 if 'row_index' not in st.session_state:
-
-    st.session_state.row_index = 0
+    st.session_state.row_index = -1  # Set to -1 to start with the New University/Stakeholder Setup
 
 if 'sub_step' not in st.session_state:
-
     st.session_state.sub_step = "main"
 
 if 'selected_ans' not in st.session_state:
-
     st.session_state.selected_ans = None
 
-
+if 'stakeholder' not in st.session_state:
+    st.session_state.stakeholder = None
 
 def next_row():
-
     st.session_state.row_index += 1
-
     st.session_state.sub_step = "main"
-
     st.session_state.selected_ans = None
 
+# --- SETUP PHASE: University & Stakeholder ---
+if st.session_state.row_index == -1:
+    st.header("🏢 Meeting Setup")
+    
+    # Question 1: University Name
+    st.session_state.univ_name = st.text_input("What is the university name?", placeholder="e.g., University of Dubai")
+    
+    # Question 2: Meeting Stakeholder
+    if st.session_state.univ_name:
+        st.subheader(f"With whom is the meeting at {st.session_state.univ_name}?")
+        role = st.radio("Select Stakeholder Role:", [
+            "Dean / Vice Dean of Engineering",
+            "Dean / Vice Dean of Research",
+            "Rector / Vice Rector",
+            "Head of Department",
+            "Professor",
+            "Library"
+        ])
+        
+        if st.button("Start Meeting"):
+            st.session_state.stakeholder = role
+            if role == "Library":
+                st.session_state.row_index = 0  # Jump to your Library code
+            else:
+                st.session_state.row_index = 99 # Placeholder for other roles
+            st.rerun()
 
+# --- NON-LIBRARY FLOW: Dean / Rector / Prof ---
+elif st.session_state.row_index == 99:
+    st.header(f"Meeting with {st.session_state.stakeholder}")
+    st.write(f"Meeting at: **{st.session_state.univ_name}**")
+    st.divider()
+    
+    st.subheader("How are you?")
+    if st.button("End Meeting"):
+        st.session_state.row_index = -1
+        st.rerun()
 
-# --- MODULE 1: CONTENT ACCESS ---
-
-if st.session_state.row_index == 0:
+# --- YOUR ORIGINAL LIBRARY CODE (DO NOT CHANGE) ---
+elif st.session_state.row_index == 0:
 
     st.header("Phase 01: Content Access")
 
