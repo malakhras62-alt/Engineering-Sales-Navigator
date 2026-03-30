@@ -668,7 +668,7 @@ elif st.session_state.row_index == 6:
 
                 st.success("💡 **Action Item:** We will align our proposal timeline with their standard processing time.")
 
-                # --- MODULE 10: STRATEGIC ALIGNMENT (DEAN MEETING) ---
+                # --- MODULE 8: STRATEGIC ALIGNMENT (DEAN MEETING) ---
 elif st.session_state.row_index == 7:
     st.header("Phase 10: Strategic Alignment")
     st.subheader("It’s clear we need strong demand from the faculty to justify this. Would it be feasible next week to have a 15-minute 'Strategic Alignment' meeting with the Dean of Engineering?")
