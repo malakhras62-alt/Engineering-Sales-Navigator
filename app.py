@@ -230,3 +230,10 @@ def save_to_csv(univ, stakeholder, solution):
 if st.button("🏁 End Meeting & Save to Database"):
     save_to_csv(st.session_state.univ_name, st.session_state.stakeholder, st.session_state.solution_pitch)
     st.success("Data saved to meeting_history.csv!")
+
+if st.checkbox("Show Meeting History"):
+    if os.path.exists("meeting_history.csv"):
+        history_df = pd.read_csv("meeting_history.csv")
+        st.dataframe(history_df)
+    else:
+        st.write("No history found yet.")
