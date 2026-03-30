@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 # --- 1. Session State Initialization ---
 if 'row_index' not in st.session_state:
@@ -13,6 +14,8 @@ if 'stakeholder' not in st.session_state:
     st.session_state.stakeholder = ""
 if 'solution_pitch' not in st.session_state:
     st.session_state.solution_pitch = ""
+if 'answers' not in st.session_state:
+    st.session_state.answers = {}  # Added to track answers for CSV
 
 def next_row():
     st.session_state.row_index += 1
@@ -81,10 +84,13 @@ elif st.session_state.row_index >= 0:
         
         if st.session_state.sub_step == "main":
             if st.button("Answer 1: Mainly through our library homepage search bar."):
+                st.session_state.answers["Phase 01: Content Access"] = "Mainly through library homepage search bar"
                 st.session_state.selected_ans = "ans1"; st.session_state.sub_step = "follow_up"; st.rerun()
             if st.button("Answer 2: We have some 'Reading Lists' integrated into the LMS."):
+                st.session_state.answers["Phase 01: Content Access"] = "Reading Lists integrated into LMS"
                 st.session_state.selected_ans = "ans2"; st.session_state.sub_step = "follow_up"; st.rerun()
             if st.button("Answer 3: Through the Publisher platform"):
+                st.session_state.answers["Phase 01: Content Access"] = "Through the Publisher platform"
                 st.session_state.selected_ans = "ans3"; st.session_state.sub_step = "follow_up"; st.rerun()
 
         elif st.session_state.sub_step == "follow_up":
@@ -115,90 +121,15 @@ elif st.session_state.row_index >= 0:
 
         if st.session_state.sub_step == "main":
             if st.button("Answer 1: MATLAB separately"):
+                st.session_state.answers["Phase 02: Active Tools"] = "MATLAB separately"
                 st.session_state.selected_ans = "ans1"; st.session_state.sub_step = "follow_up"; st.rerun()
             if st.button("Answer 2: Technical tables"):
+                st.session_state.answers["Phase 02: Active Tools"] = "Technical tables"
                 st.session_state.selected_ans = "ans2"; st.session_state.sub_step = "follow_up"; st.rerun()
             if st.button("Answer 3: Faculty handles tools"):
+                st.session_state.answers["Phase 02: Active Tools"] = "Faculty handles tools"
                 st.session_state.selected_ans = "ans3"; st.session_state.sub_step = "follow_up"; st.rerun()
 
         elif st.session_state.sub_step == "follow_up":
             if st.session_state.selected_ans == "ans1":
-                st.info("🎯 **Objection:** Where do students find validated material properties to plug into MATLAB without hours of searching?")
-            elif st.session_state.selected_ans == "ans2":
-                st.info("🎯 **Objection:** Are those tables just pictures, or can students export data directly to Excel/CAD?")
-            elif st.session_state.selected_ans == "ans3":
-                st.info("🎯 **Objection:** Wouldn't it be great to combine literature and tools in a single solution?")
-            st.button("Next Main Question ➡️", on_click=next_row)
-
-    # --- PHASE 03: DATA EXTRACTION ---
-    elif st.session_state.row_index == 2:
-        st.header("Phase 03: Data Extraction & Accuracy")
-        st.subheader("How would the library address a request to interact with a graph or get a material property?")
-        if st.button("Answer 1: Manual Extraction"):
-            st.error("🎯 **Objection:** Manual extraction is the #1 mistake causing inaccurate information and typo errors.")
-            st.button("Next Main Question ➡️", on_click=next_row)
-        if st.button("Answer 2: Specialized Digitization Software"):
-            st.info("🎯 **Objection:** Moving between tools creates 'Data Friction.' Why not have interactive data on the page?")
-            st.button("Next Main Question ➡️", on_click=next_row)
-
-    # --- PHASE 04: EVALUATION PROCESS ---
-    elif st.session_state.row_index == 3:
-        st.header("Phase 04: Evaluation Process")
-        st.subheader("What do you take into consideration during evaluation?")
-        if st.button("Usage, Demand, Price"):
-            st.info("🎯 **Objection:** How many faculty members must request a tool to guarantee purchase?")
-            st.button("Next Main Question ➡️", on_click=next_row)
-        if st.button("Usage and Price"):
-            st.info("🎯 **Objection:** What specific content view usage do you consider 'good'?")
-            st.button("Next Main Question ➡️", on_click=next_row)
-
-    # --- PHASE 05: DECISION MAKER ---
-    elif st.session_state.row_index == 4:
-        st.header("Phase 05: Decision Maker & Power")
-        st.subheader("Who is the ultimate decision maker?")
-        ans = st.radio("Select Response:", ["Library Director", "Library Committee", "Rector"])
-        if st.button("Confirm Response"):
-            if ans == "Library Director": st.info("🎯 **Objection:** What 'internal proof' do you need to justify the purchase?")
-            elif ans == "Library Committee": st.info("🎯 **Objection:** Who has the highest influence on specialized tools?")
-            else: st.info("🎯 **Objection:** How does the Rector decide if we should proceed?")
-            st.button("Next Main Question ➡️", on_click=next_row)
-
-    # --- PHASE 06: BUDGET ---
-    elif st.session_state.row_index == 5:
-        st.header("Phase 06: Budget & Financial Reality")
-        st.subheader("Is there a specific budget set aside for new tools?")
-        if st.button("Depends on budget received later"):
-            st.info("🎯 **Objection:** When is that confirmed (Q1-Q4)? Do you have a prioritized list?")
-            st.button("Next Main Question ➡️", on_click=next_row)
-        if st.button("No budget / Need to cancel a tool"):
-            st.error("🎯 **Objection:** What criteria make a new tool a 'top priority' to replace an old one?")
-            st.button("Next Main Question ➡️", on_click=next_row)
-
-    # --- PHASE 07: TIMELINE ---
-    elif st.session_state.row_index == 6:
-        st.header("Phase 07: Timeline & Procurement")
-        st.subheader("When would you like the start date to be?")
-        st.button("01 Jan", on_click=next_row)
-        st.button("Next Quarter", on_click=next_row)
-        st.button("September", on_click=next_row)
-
-    # --- PHASE 08: THE DEAN MEETING ---
-    elif st.session_state.row_index == 7:
-        st.header("Phase 08: Strategic Alignment (The Dean)")
-        st.subheader("Feasibility of a 15-min meeting with the Dean next week?")
-        if st.button("Let's start trial first"):
-            st.error("🎯 **Objection:** A trial without faculty endorsement is a 'dead trial.' We need alignment first.")
-        if st.button("I'll talk to the Dean myself"):
-            st.info("🎯 **Objection:** I'll reach out to highlight key points and keep you in CC to save you time.")
-        if st.button("Next Main Question ➡️"):
-            next_row()
-
-    # --- PHASE 09: WRAP UP ---
-    elif st.session_state.row_index == 8:
-        st.balloons()
-        st.header("✅ Meeting Complete")
-        st.write(f"Meeting with **{st.session_state.stakeholder}** at **{st.session_state.univ_name}**.")
-        st.write(f"Solution Pitched: **{st.session_state.solution_pitch}**")
-        if st.button("Restart Navigator"):
-            st.session_state.row_index = -1
-            st.rerun()
+                st.info("🎯 **Objection
