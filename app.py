@@ -668,4 +668,44 @@ elif st.session_state.row_index == 6:
 
                 st.success("💡 **Action Item:** We will align our proposal timeline with their standard processing time.")
 
+                # --- MODULE 10: STRATEGIC ALIGNMENT (DEAN MEETING) ---
+elif st.session_state.row_index == 7:
+    st.header("Phase 10: Strategic Alignment")
+    st.subheader("It’s clear we need strong demand from the faculty to justify this. Would it be feasible next week to have a 15-minute 'Strategic Alignment' meeting with the Dean of Engineering?")
+
+    # LAYER 1: MAIN ANSWERS
+    if st.session_state.sub_step == "main":
+        if st.button("Answer 1: Let's just start the trial first and see usage."):
+            st.session_state.selected_ans = "ans1"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 2: I'll talk to the Dean myself and let you know."):
+            st.session_state.selected_ans = "ans2"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 3: We usually just post the trial link on the website."):
+            st.session_state.selected_ans = "ans3"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+
+    # LAYER 2: OBJECTIONS
+    elif st.session_state.sub_step == "follow_up":
+        
+        # Branch for Answer 1 (Trial without endorsement)
+        if st.session_state.selected_ans == "ans1":
+            st.error("🎯 **Objection:** A trial without faculty endorsement is a 'dead trial.' If the Dean hasn't told students this is a 'must-use,' usage will be low and the Rector will deny budget.")
+            st.info("💡 **Pivot:** To protect your time, we need that 15-minute alignment first.")
+            st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 2 (Workload reduction)
+        elif st.session_state.selected_ans == "ans2":
+            st.info("🎯 **Objection:** I don't want to add to your workload in preparing the brief. I will reach out to the Dean and highlight the key points while keeping you in CC.")
+            st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 3 (Website Post vs. 'Scream')
+        elif st.session_state.selected_ans == "ans3":
+            st.warning("🎯 **Objection:** For a specialized engineering tool, we need the faculty to 'Scream' for it. Posting a link is just guessing if it meets their needs.")
+            st.info("💡 **Pivot:** Shall we aim for a brief call with the Vice Dean instead if the Dean is unavailable?")
+            st.button("Next Main Question ➡️", on_click=next_row)
+
                 st.button("Next Main Question ➡️", on_click=next_row)
