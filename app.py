@@ -60,3 +60,41 @@ if st.session_state.row_index == 0:
             if st.button("3-A: Accessing multiple databases individually"):
                 st.error("💡 **Follow-up:** Would not that result to missing information and data not to mention that amount of time they need to spend to find what they are looking for?")
                 st.button("Next Main Question ➡️", on_click=next_row)
+
+# --- MODULE 2: ACTIVE TOOLS ---
+elif st.session_state.row_index == 1:
+    st.header("Phase 02: Active Tools & Workflow")
+    st.subheader("Engineering requires 'doing.' How is the library providing 'Active Tools' (calculators/converters) rather than just 'Passive Reading' (PDFs)?")
+
+    # LAYER 1: MAIN ANSWERS
+    if st.session_state.sub_step == "main":
+        if st.button("Answer 1: We provide access to software like MATLAB separately."):
+            st.session_state.selected_ans = "ans1"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 2: Our specialized databases have some technical tables."):
+            st.session_state.selected_ans = "ans2"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 3: Faculty handles practical tools; we provide the literature."):
+            st.session_state.selected_ans = "ans3"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+
+    # LAYER 2: OBJECTIONS
+    elif st.session_state.sub_step == "follow_up":
+        
+        # Branch for Answer 1
+        if st.session_state.selected_ans == "ans1":
+            st.info("🎯 **Objection:** MATLAB is the engine, but where do students find the validated material properties to plug into those models without spending hours searching journals?")
+            st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 2
+        elif st.session_state.selected_ans == "ans2":
+            st.info("🎯 **Objection:** Are those tables just pictures in a PDF, or can students export the data points directly into Excel or CAD?")
+            st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 3
+        elif st.session_state.selected_ans == "ans3":
+            st.info("🎯 **Objection:** Would it not be great to combine the literature provided by the library with the tools in a single solution?")
+            st.button("Next Main Question ➡️", on_click=next_row)
