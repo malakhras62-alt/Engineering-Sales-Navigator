@@ -1,125 +1,62 @@
 import streamlit as st
 
-# --- Page Configuration ---
-st.set_page_config(page_title="Engineering Sales Wizard", layout="wide")
-
 # --- Session State Initialization ---
 if 'row_index' not in st.session_state:
     st.session_state.row_index = 0
 if 'sub_step' not in st.session_state:
     st.session_state.sub_step = "main"
+if 'selected_ans' not in st.session_state:
+    st.session_state.selected_ans = None
 
 def next_row():
     st.session_state.row_index += 1
     st.session_state.sub_step = "main"
+    st.session_state.selected_ans = None
 
-def reset():
-    st.session_state.row_index = 0
-    st.session_state.sub_step = "main"
-
-# --- Exact Data Mapping from your Spreadsheets ---
-data = [
-    {
-        "main_q": "How are your students currently accessing content?",
-        "answers": {
-            "Answer 1": {
-                "text": "Through the platforms directly",
-                "follow_up": "Which Platform or tools are they using?",
-                "sub_answers": {
-                    "A": ("MATLAB / Solidworks / AutoCad", "How do they get verified equations into those tools without risking human error from static PDFs?"),
-                    "B": ("We don't Know they are specialized platforms", "If the library doesn't know the workflow, how can you ensure the budget supports actual results?")
-                }
-            },
-            "Answer 2": {
-                "text": "mainly through our library homepage search bar.",
-                "follow_up": "Static lists are great for theory, but how do you ensure the interactive data (equations/tables) is available where they work?",
-                "sub_answers": {
-                    "A": ("We don't Have anything", "Without interactive tools, how do you prevent the 30% time-waste on manual data entry?"),
-                    "B": ("We provide access to software like MATLAB separately", "MATLAB is the engine, but where do they get the validated fuel (material properties) to plug into it?")
-                }
-            }
-        }
-    },
-    {
-        "main_q": "How does the library currently link its subscription spend to 'Student Outcomes,' like Capstone project success or higher GPA for frequent users?",
-        "answers": {
-            "Answer 1": {
-                "text": "We track usage and downloads",
-                "follow_up": "Usage tells us they 'looked' at a PDF, but how do we prove it helped them 'build' a better project?",
-                "sub_answers": {}
-            },
-            "Answer 2": {
-                "text": "We don't have a formal way to track outcomes",
-                "follow_up": "If we can't link spend to success, how do we protect the budget from 5% annual cuts?",
-                "sub_answers": {}
-            }
-        }
-    },
-    {
-        "main_q": "With the rise of GenAI, how do you ensure students are using 'Domain-Specific' AI that provides validated data rather than general AI that might hallucinate engineering values?",
-        "answers": {
-            "Answer 1": {
-                "text": "Students use ChatGPT or general search",
-                "follow_up": "General AI has a 15-20% hallucination rate in engineering. How do you protect the university's research integrity?",
-                "sub_answers": {}
-            },
-            "Answer 2": {
-                "text": "We expect faculty to guide them",
-                "follow_up": "Faculty are busy; without a 'Safe Haven' of validated data, how do we prevent manual errors in student designs?",
-                "sub_answers": {}
-            }
-        }
-    },
-    {
-        "main_q": "Who is the ultimate decision maker Library director or Library Committee or rector?",
-        "answers": {
-            "Answer 1": {
-                "text": "Library Director",
-                "follow_up": "Since you hold the ultimate decision, what specific 'internal proof' do you need to justify the Purchase?",
-                "sub_answers": {
-                    "A": ("Demand / Usage / Budget", "Let's align on a success plan to prove this specific value to the Rector.")
-                }
-            }
-        }
-    }
-]
-
-# --- UI RENDERER ---
-st.sidebar.title("Meeting Controls")
-st.sidebar.button("🔄 Reset Meeting", on_click=reset)
-inst_name = st.sidebar.text_input("University Name", "University of Dubai")
-
-if st.session_state.row_index < len(data):
-    current_row = data[st.session_state.row_index]
-    st.header(f"Phase {st.session_state.row_index + 1}")
-    st.subheader(current_row["main_q"])
-
+# --- MODULE 1: CONTENT ACCESS ---
+if st.session_state.row_index == 0:
+    st.header("Phase 01: Content Access")
+    st.subheader("How are your students currently accessing content?")
+    
+    # LAYER 1: MAIN ANSWERS
     if st.session_state.sub_step == "main":
-        for key, val in current_row["answers"].items():
-            if st.button(val["text"]):
-                st.session_state.selected_ans = key
-                st.session_state.sub_step = "follow_up"
-                st.rerun()
+        if st.button("Answer 1: Mainly through our library homepage search bar."):
+            st.session_state.selected_ans = "ans1"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 2: We have some 'Reading Lists' integrated into the LMS."):
+            st.session_state.selected_ans = "ans2"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 3: Through the Publisher platform"):
+            st.session_state.selected_ans = "ans3"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
 
+    # LAYER 2: OBJECTIONS & SUB-ANSWERS
     elif st.session_state.sub_step == "follow_up":
-        ans_data = current_row["answers"][st.session_state.selected_ans]
-        st.info(f"🎯 **Follow-up:** {ans_data['follow_up']}")
         
-        if ans_data["sub_answers"]:
-            for sub_key, sub_val in ans_data["sub_answers"].items():
-                if st.button(sub_val[0]):
-                    st.session_state.final_follow_up = sub_val[1]
-                    st.session_state.sub_step = "final"
-                    st.rerun()
-        else:
+        # Branch for Answer 1
+        if st.session_state.selected_ans == "ans1":
+            st.info("🎯 **Objection:** Discovery layers often rely on exact keyword matching. How do you ensure a student looking for 'corrosion' doesn't miss content using the term 'oxidation'?")
+            if st.button("1-A: Our search engine uses basic Boolean logic and tagging."):
+                st.success("💡 **Follow-up:** If a student isn't a 'Search Expert,' they miss out on content you paid for. How do you justify the ROI of content that stays hidden?")
+                st.button("Next Main Question ➡️", on_click=next_row)
+            if st.button("1-B: We teach students how to search better in workshops."):
+                st.success("💡 **Follow-up:** But even if you teach them how to do a search, Engineering students still needs information about topics not directly related to their department and might not be knowledgable about the synonyms that they need to include.")
+                st.button("Next Main Question ➡️", on_click=next_row)
+            if st.button("1-C: We trust the metadata provided by the publishers."):
+                st.success("💡 **Follow-up:** If the search isn't 'Concept-Based,' aren't you essentially paying for a library where the books are invisible to the users?")
+                st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 2
+        elif st.session_state.selected_ans == "ans2":
+            st.info("🎯 **Objection:** Static lists are great for theory, but if they want to search beyond that list or pull values out with Graphs and Equations what would they do?")
             st.button("Next Main Question ➡️", on_click=next_row)
 
-    elif st.session_state.sub_step == "final":
-        st.success(f"💡 **Closing Insight:** {st.session_state.final_follow_up}")
-        st.button("Next Main Question ➡️", on_click=next_row)
-else:
-    st.balloons()
-    st.success("Meeting Complete!")
-
-st.sidebar.divider()
-st.sidebar.write(f"**Target:** {inst_name}")
+        # Branch for Answer 3
+        elif st.session_state.selected_ans == "ans3":
+            st.info("🎯 **Objection:** So the user needs to access multiple databases and search individually between them to find the information.")
+            if st.button("3-A: Accessing multiple databases individually"):
+                st.error("💡 **Follow-up:** Would not that result to missing information and data not to mention that amount of time they need to spend to find what they are looking for?")
+                st.button("Next Main Question ➡️", on_click=next_row)
