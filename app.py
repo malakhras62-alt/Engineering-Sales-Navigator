@@ -128,3 +128,48 @@ elif st.session_state.row_index == 2:
         elif st.session_state.selected_ans == "ans2":
             st.info("🎯 **Objection:** Moving between multiple tools creates 'Data Friction.' Would it not be more secure to have a single source where the data is interactive right on the page?")
             st.button("Next Main Question ➡️", on_click=next_row)
+
+# --- MODULE 4: EVALUATION PROCESS ---
+elif st.session_state.row_index == 3:
+    st.header("Phase 04: Evaluation Process & Criteria")
+    st.subheader("In the evaluation process, what are the things that you take into consideration?")
+
+    # LAYER 1: MAIN ANSWERS
+    if st.session_state.sub_step == "main":
+        if st.button("Answer 1: Usage, Demand, and Price"):
+            st.session_state.selected_ans = "ans1"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 2: Usage and Price"):
+            st.session_state.selected_ans = "ans2"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+
+    # LAYER 2: OBJECTIONS
+    elif st.session_state.sub_step == "follow_up":
+        
+        # Branch for Answer 1
+        if st.session_state.selected_ans == "ans1":
+            st.info("🎯 **Objection/Follow-up 1:** How many faculty members should request the tool to guarantee the purchase if the price was convenient?")
+            
+            # LAYER 3: SUB-ANSWERS
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                if st.button("Sub-Answer 1: Dean is Enough"):
+                    st.success("💡 **Final Follow-up:** What is the formal process for the Engineering Faculty to request a new tool?")
+                    st.button("Next Objection ➡️", on_click=None) # Or move to next main question
+            with col2:
+                if st.button("Sub-Answer 2: Dean and Vice Dean"):
+                    st.success("💡 **Final Follow-up:** What is the formal process for the Engineering Faculty to request a new tool?")
+            with col3:
+                if st.button("Sub-Answer 3: Specific Number of faculty"):
+                    st.success("💡 **Final Follow-up:** What is the formal process for the Engineering Faculty to request a new tool?")
+            
+            st.divider()
+            st.info("🎯 **Objection/Follow-up 2:** What should be the content view usage for you to consider the tool?")
+            st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 2
+        elif st.session_state.selected_ans == "ans2":
+            st.info("🎯 **Objection/Follow-up:** What should be the content view usage for you to consider the tool?")
+            st.button("Next Main Question ➡️", on_click=next_row)
