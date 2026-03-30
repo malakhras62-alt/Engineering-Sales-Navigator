@@ -570,7 +570,7 @@ elif st.session_state.row_index == 5:
 
 # --- MODULE 7: TIMELINE & PROCUREMENT ---
 
-elif st.session_state.row_index == 7:
+elif st.session_state.row_index == 6:
 
     st.header("Phase 08: Timeline & Procurement")
 
