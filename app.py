@@ -173,3 +173,54 @@ elif st.session_state.row_index == 3:
         elif st.session_state.selected_ans == "ans2":
             st.info("🎯 **Objection/Follow-up:** What should be the content view usage for you to consider the tool?")
             st.button("Next Main Question ➡️", on_click=next_row)
+
+# --- MODULE 5: DECISION MAKER & POWER ---
+elif st.session_state.row_index == 4:
+    st.header("Phase 05: Decision Maker & Power")
+    st.subheader("Who is the ultimate decision maker—Library Director, Library Committee, or Rector?")
+
+    # LAYER 1: MAIN ANSWERS
+    if st.session_state.sub_step == "main":
+        if st.button("Answer 1: Library Director"):
+            st.session_state.selected_ans = "ans1"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 2: Library Committee"):
+            st.session_state.selected_ans = "ans2"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+        if st.button("Answer 3: Rector"):
+            st.session_state.selected_ans = "ans3"
+            st.session_state.sub_step = "follow_up"
+            st.rerun()
+
+    # LAYER 2: OBJECTIONS & SUB-STEPS
+    elif st.session_state.sub_step == "follow_up":
+        
+        # Branch for Answer 1 (Direct Power)
+        if st.session_state.selected_ans == "ans1":
+            st.info("🎯 **Objection/Follow-up:** Since you hold the ultimate decision, what specific 'internal proof' do you need to justify the Purchase?")
+            st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 2 (Committee Influence)
+        elif st.session_state.selected_ans == "ans2":
+            st.info("🎯 **Objection/Follow-up:** Who sits on that committee, and which of those stakeholders usually has the highest influence regarding 'specialized' tools?")
+            
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                if st.button("Sub-Answer 1: I will be voting"):
+                    st.success("💡 **Final Follow-up:** How do they decide if this is a tool we should proceed with or not?")
+                    st.button("Next Main Question ➡️", on_click=next_row)
+            with col2:
+                if st.button("Sub-Answer 2: Vice Dean / Dean"):
+                    st.success("💡 **Strategy:** Focus on Faculty 'Scream' and Accreditation value.")
+                    st.button("Next Main Question ➡️", on_click=next_row)
+            with col3:
+                if st.button("Sub-Answer 3: Rector / Vice Rector"):
+                    st.success("💡 **Final Follow-up:** How does he decide if this is a tool we should proceed with or not?")
+                    st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Branch for Answer 3 (Top-Down Power)
+        elif st.session_state.selected_ans == "ans3":
+            st.info("🎯 **Objection/Follow-up:** How does the Rector decide if this is a tool we should proceed with or not?")
+            st.button("Next Main Question ➡️", on_click=next_row)
