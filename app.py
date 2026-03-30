@@ -334,5 +334,3 @@ elif st.session_state.row_index == 7:
             if st.button("No (Clear process)"):
                 st.success("💡 **Action Item:** We will align our proposal timeline with their standard processing time.")
                 st.button("Next Main Question ➡️", on_click=next_row)
-
-
