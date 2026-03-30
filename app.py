@@ -84,10 +84,10 @@ elif st.session_state.row_index >= 0:
         
         if st.session_state.sub_step == "main":
             if st.button("Answer 1: Mainly through our library homepage search bar."):
-                st.session_state.answers["Phase 01: Content Access"] = "Mainly through library homepage search bar"
+                st.session_state.answers["Phase 01: Content Access"] = "Mainly through library homepage search bar."
                 st.session_state.selected_ans = "ans1"; st.session_state.sub_step = "follow_up"; st.rerun()
             if st.button("Answer 2: We have some 'Reading Lists' integrated into the LMS."):
-                st.session_state.answers["Phase 01: Content Access"] = "Reading Lists integrated into LMS"
+                st.session_state.answers["Phase 01: Content Access"] = "Reading Lists integrated into the LMS."
                 st.session_state.selected_ans = "ans2"; st.session_state.sub_step = "follow_up"; st.rerun()
             if st.button("Answer 3: Through the Publisher platform"):
                 st.session_state.answers["Phase 01: Content Access"] = "Through the Publisher platform"
@@ -157,11 +157,11 @@ elif st.session_state.row_index >= 0:
         st.header("Phase 04: Evaluation Process")
         st.subheader("What do you take into consideration during evaluation?")
         if st.button("Usage, Demand, Price"):
-            st.session_state.answers["Phase 04: Evaluation"] = "Usage, Demand, Price"
+            st.session_state.answers["Phase 04: Evaluation Process"] = "Usage, Demand, Price"
             st.info("🎯 **Objection:** How many faculty members must request a tool to guarantee purchase?")
             st.button("Next Main Question ➡️", on_click=next_row)
         if st.button("Usage and Price"):
-            st.session_state.answers["Phase 04: Evaluation"] = "Usage and Price"
+            st.session_state.answers["Phase 04: Evaluation Process"] = "Usage and Price"
             st.info("🎯 **Objection:** What specific content view usage do you consider 'good'?")
             st.button("Next Main Question ➡️", on_click=next_row)
 
@@ -194,7 +194,6 @@ elif st.session_state.row_index >= 0:
     elif st.session_state.row_index == 6:
         st.header("Phase 07: Timeline & Procurement")
         st.subheader("When would you like the start date to be?")
-        
         if st.button("01 Jan"):
             st.session_state.answers["Phase 07: Timeline"] = "01 Jan"
             next_row()
@@ -222,7 +221,7 @@ elif st.session_state.row_index >= 0:
             next_row()
             st.rerun()
 
-    # --- PHASE 09: WRAP UP (Export Features Added Here) ---
+    # --- PHASE 09: WRAP UP (Export CSV Added Here) ---
     elif st.session_state.row_index == 8:
         st.balloons()
         st.header("✅ Meeting Complete")
@@ -256,5 +255,3 @@ elif st.session_state.row_index >= 0:
             st.session_state.row_index = -1
             st.session_state.answers = {} # Clear past answers
             st.rerun()
-
-
