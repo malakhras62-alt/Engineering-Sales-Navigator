@@ -222,5 +222,63 @@ elif st.session_state.row_index == 4:
 
         # Branch for Answer 3 (Top-Down Power)
         elif st.session_state.selected_ans == "ans3":
+
+    # --- MODULE 6: BUDGET & PRIORITIZATION ---
+elif st.session_state.row_index == 5:
+    st.header("Phase 06: Budget & Financial Reality")
+    st.subheader("Since tools and databases prices rise 5% annually and the budget is getting tighter, is there a specific budget set aside for new tools?")
+
+    # LAYER 1: MAIN ANSWERS
+    if st.session_state.sub_step == "main":
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Answer 1: Depends on the budget received later this year"):
+                st.session_state.selected_ans = "ans1"
+                st.session_state.sub_step = "follow_up"
+                st.rerun()
+        with col2:
+            if st.button("Answer 2: No budget / Need to cancel a tool to subscribe"):
+                st.session_state.selected_ans = "ans2"
+                st.session_state.sub_step = "follow_up"
+                st.rerun()
+
+    # LAYER 2: OBJECTIONS & QUARTERLY TIMELINES
+    elif st.session_state.sub_step == "follow_up":
+        
+        # Logic for Answer 1
+        if st.session_state.selected_ans == "ans1":
+            st.info("🎯 **Objection/Follow-up 1:** When is the next budget confirmed?")
+            q_cols = st.columns(4)
+            with q_cols[0]: st.button("Q1", on_click=None)
+            with q_cols[1]: st.button("Q2", on_click=None)
+            with q_cols[2]: st.button("Q3", on_click=None)
+            with q_cols[3]: st.button("Q4", on_click=None)
+            
+            st.divider()
+            st.info("🎯 **Objection/Follow-up 2:** Do you have prioritized new solutions on your list that you would like to first subscribe to if you get additional budget?")
+            
+            c1, c2 = st.columns(2)
+            with c1:
+                if st.button("Yes"):
+                    st.success("💡 **Follow-up:** If you are evaluating a new tool within this period, what makes it a top priority for you?")
+            with c2:
+                if st.button("No"):
+                    st.warning("💡 **Pivot:** How can we ensure the Engineering Dean's requirements put this at the top of the priority list?")
+            
+            st.button("Next Main Question ➡️", on_click=next_row)
+
+        # Logic for Answer 2 (The "Replacement" Strategy)
+        elif st.session_state.selected_ans == "ans2":
+            st.info("🎯 **Objection/Follow-up 1:** Do you have prioritized new solutions on your list that you would like to first subscribe to if you get additional budget?")
+            
+            c1, c2 = st.columns(2)
+            with c1:
+                if st.button("Yes (Prioritized)"):
+                    st.success("💡 **Follow-up:** What are the criteria that put a tool on that top priority list?")
+            with c2:
+                if st.button("No (Not yet)"):
+                    st.error("💡 **Objection/Follow-up 2:** If you are evaluating a new database or tool, what things make you consider it a top priority?")
+            
+            st.button("Next Main Question ➡️", on_click=next_row)
             st.info("🎯 **Objection/Follow-up:** How does the Rector decide if this is a tool we should proceed with or not?")
             st.button("Next Main Question ➡️", on_click=next_row)
